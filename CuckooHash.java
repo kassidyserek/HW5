@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   KASS SEREK / COMP272 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -244,14 +244,51 @@ public class CuckooHash<K, V> {
      * @param value the value of the element to add
 	 */
 
- 	public void put(K key, V value) {
+	public void put(K key, V value) {
+		// calculate two possible positions for the key using hash functions
+		int pos1 = hash1(key);
+		int pos2 = hash2(key);
+		// counter for retry attempts
+		int retries = 0;
+		// key to insert
+		K displacedKey = key;
+		// value to insert
+		V displacedValue = value;
 
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
+		while(retries < CAPACITY){
+			// if the position is empty, place the key-value pair here
+			if(table[pos1] == null)
+			{
+				table[pos1] = new Bucket<>(displacedKey,displacedValue);
+				return;
+			}
 
-		return;
+			// if the key-value pair already exists at the position, do nothing
+			if(table[pos1].getBucKey().equals(displacedKey) && table[pos1].getValue().equals(displacedValue))
+			{
+				return;
+			}
+
+			// displace the current key-value pair and insert the new one
+			Bucket<K, V> temp = table[pos1];
+			table[pos1] = new Bucket<>(displacedKey, displacedValue);
+			displacedKey = temp.getBucKey();
+			displacedValue = temp.getValue();
+
+			// switch to the other hash position for the displaced key
+			if(pos1 == hash1(displacedKey)) {
+				pos1 = hash2(displacedKey);
+			} else {
+				pos1 = hash1(displacedKey);
+			}
+			// increment retry count
+			retries++;
+		}
+		// if the capacity is reached, rehash the table and retry the insertion
+		rehash();
+		put(displacedKey, displacedValue);
 	}
+
 
 
 	/**
