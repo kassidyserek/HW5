@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   KASS SEREK / COMP272 002
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -31,10 +31,23 @@ class ProblemSolutions {
      */
 
     public boolean isSubset(int list1[], int list2[]) {
+        // create a set to store all elements of list1
+        Set<Integer> set = new HashSet<>();
 
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
+        // add each element from list1 to the set
+        for (int num : list1) {
+            set.add(num);
+        }
 
-        return false;
+        // check each element in list2 to see if it's in the set
+        for (int num : list2) {
+            // if any element in list2 is not in the set, return false
+            if (!set.contains(num)) {
+                return false;
+            }
+        }
+        // if all elements in list2 are found in list 1, return true
+        return true;
     }
 
 
@@ -52,10 +65,22 @@ class ProblemSolutions {
      */
 
     public int findKthLargest(int[] array, int k) {
+        // create a min-heap to keep track of the k largest elements
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
-        // ADD YOUR CODE HERE
+        // iterate over each element in the array
+        for (int num : array) {
+            // add the current element to the min-heap
+            minHeap.offer(num);
 
-        return 0;
+            // if the heap size exceeds k, remove the smallest element
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+
+        // the root of the min-heap is the kth largest element
+        return minHeap.peek();
     }
 
 
@@ -73,10 +98,20 @@ class ProblemSolutions {
      */
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
+        // create a new array to hold the merged result of both arrays
+        int[] mergedArray = new int[array1.length + array2.length];
 
-        // ADD YOU CODE HERE
+        // copy all elements from array 1 into the merged array
+        System.arraycopy(array1, 0, mergedArray, 0, array1.length);
 
-        return null;
+        // copy all elements from array2 into the merged array, starting after array1
+        System.arraycopy(array2, 0, mergedArray, array1.length, array2.length);
+
+        // sort the merged array in ascending order
+        Arrays.sort(mergedArray);
+
+        // return the sorted merged array
+        return mergedArray;
     }
 
 }
